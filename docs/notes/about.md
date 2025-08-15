@@ -12,7 +12,7 @@ permalink: /about/
 - name: 東雲研究所 # 昵称
   desc: 「人生短暂,喵喵笨蛋」 # 介绍
   avatar: https://gcore.jsdelivr.net/gh/shininome/blog_imgs@blog/blog/basic/sakamoto.png # 头像
-  link: https://shinonomoew.top/  # 链接
+  link: https://shinonomeow.top/  # 链接
 ```
 
 申请前记得先添加本站哦~
