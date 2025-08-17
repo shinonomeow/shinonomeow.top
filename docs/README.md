@@ -5,7 +5,7 @@ config:
   -
     type: banner
     full: true
-    banner: https://gcore.jsdelivr.net/gh/shininome/blog_imgs@blog/blog/background/koro_full.png
+    banner: /images/koro_full.png
     bannerMask:
       dark: 0.3
     hero:

@@ -6,12 +6,12 @@ import { enNotes, zhNotes } from './notes'
  * @see https://theme-plume.vuejs.press/config/basic/
  */
 export default defineThemeConfig({
-  logo: 'https://gcore.jsdelivr.net/gh/shininome/blog_imgs@blog/blog/basic/sakamoto.png',
+  logo: '/images/sakamoto.png',
 
   appearance: true,  // 配置 深色模式
 
   social: [
-    { icon: 'github', link: 'https://github.com/shininome' },
+    { icon: 'github', link: 'https://github.com/shinonomeow' },
   ],
   // navbarSocialInclude: ['github'], // 允许显示在导航栏的 social 社交链接
   // aside: true, // 页内侧边栏， 默认显示在右侧
@@ -47,7 +47,7 @@ export default defineThemeConfig({
        * 这是自已的头像
        */
       profile: {
-        avatar: 'https://gcore.jsdelivr.net/gh/shininome/blog_imgs@blog/blog/basic/Avatar.jpg',
+        avatar: '/images/Avatar.jpg',
         name: '東雲',
         description: '普伦西 喵喵',
         // circle: true,
@@ -74,7 +74,7 @@ export default defineThemeConfig({
        * @see https://theme-plume.vuejs.press/config/basic/#profile
        */
       profile: {
-        avatar: 'https://gcore.jsdelivr.net/gh/shininome/blog_imgs@blog/blog/basic/Avatar.jpg',
+        avatar: '/images/Avatar.jpg',
         name: 'shinonome',
         description: 'meow meow',
         // circle: true,

@@ -20,7 +20,7 @@ export default defineUserConfig({
 
   head: [
     // 配置站点图标
-    ['link', { rel: 'icon', type: 'image/png', href: 'https://gcore.jsdelivr.net/gh/shininome/blog_imgs@blog/blog/basic/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/favicon.ico' }],
   ],
 
   bundler: viteBundler(),
@@ -31,7 +31,7 @@ export default defineUserConfig({
     hostname: 'https://shinonomeow.top/',
 
     /* 文档仓库配置，用于 editLink */
-    docsRepo: 'shininome/shinonomeow.top',
+    docsRepo: 'shinonomeow/shinonomeow.top',
     docsDir: 'docs',
     docsBranch: 'main',
 
@@ -105,17 +105,6 @@ export default defineUserConfig({
       // readingTime: true,
 
       /**
-       * markdown enhance
-       * @see https://theme-plume.vuejs.press/config/plugins/markdown-enhance/
-       */
-      // markdownEnhance: {
-      //   chartjs: true,
-      //   echarts: true,
-      //   mermaid: true,
-      //   flowchart: true,
-      // },
-
-      /**
        *  markdown power
        * @see https://theme-plume.vuejs.press/config/plugin/markdown-power/
        */
@@ -169,7 +158,7 @@ export default defineUserConfig({
       comment: {
         provider: 'Giscus', // "Artalk" | "Giscus" | "Twikoo" | "Waline"
         comment: true,
-        repo: "shininome/shinonomeow.top", // 仓库
+        repo: "shinonomeow/shinonomeow.top", // 仓库
         repoId: 'R_kgDONwLu4g',
         category: 'Announcements',
         categoryId: 'DIC_kwDONwLu4s4CmYNj',

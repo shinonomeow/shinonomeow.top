@@ -7,8 +7,8 @@ export const zhNavbar = defineNavbarConfig([
   // { text: '标签', link: '/blog/tags/' },
   {
     text: '笔记',
-    items: [{ text: '示例', link: '/notes/demo/README.md' },
-    { text: 'LazyVim', link: '/notes/Lazyvim/README.md' },
+    items: [
+      { text: 'LazyVim', link: '/notes/Lazyvim/README.md' },
 
     ]
   },

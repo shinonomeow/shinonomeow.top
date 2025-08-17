@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "天空又矮又圆，大地又平又方。一下跳进宇宙深空，一下钻进大陆背面。普伦西它拿着铁棒，到处敲打恶棍流氓。喵喵！",
-  "packageManager": "pnpm@10.0.0",
+  "packageManager": "pnpm@10.14.0",
   "author": "東雲柊 <gtx2shino@gmail.com>",
   "license": "MIT",
   "engines": {
@@ -17,14 +17,14 @@
     "vp-update": "pnpm dlx vp-update"
   },
   "devDependencies": {
-    "@vuepress/bundler-vite": "2.0.0-rc.23",
+    "@vuepress/bundler-vite": "2.0.0-rc.24",
     "@vuepress/shiki-twoslash": "2.0.0-rc.110",
     "http-server": "^14.1.1",
-    "sass-embedded": "^1.89.2",
-    "typescript": "^5.8.3",
-    "vue": "^3.5.17",
-    "vuepress": "2.0.0-rc.23",
-    "vuepress-theme-plume": "1.0.0-rc.156"
+    "sass-embedded": "^1.90.0",
+    "typescript": "^5.9.2",
+    "vue": "^3.5.18",
+    "vuepress": "2.0.0-rc.24",
+    "vuepress-theme-plume": "1.0.0-rc.160"
   },
   "dependencies": {
     "vuepress-plugin-shiki-twoslash": "1.0.39"
