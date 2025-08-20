@@ -6,6 +6,7 @@ permalink: /article/tml6nabz/
 
 
 更详细的内容可以看[MDP Homomorphic Networks](https://zhuanlan.zhihu.com/p/655937679) 这篇讲解, 这里更多的讲讲代码的实现.
+经过了两天, 发现自已的代码能力还是不够
 <!-- more -->
 ## 基础概念
 
@@ -15,7 +16,7 @@ permalink: /article/tml6nabz/
 
 $$f(x) = f(L_g[x]), \quad \text{for all } g \in G, x \in \mathcal{X}$$
 
-简单来说就是, 经过变化后, 输出将保持不变, 在具体的实现里, 也就是说 **价值函数** 因该是一个不变的
+简单来说就是, 经过变化后, 输出将保持不变, 在具体的实现里, 也就是说 **价值函数** 应该是一个不变的
 
 ### 等变性(Equivariance)
 
@@ -24,6 +25,49 @@ $$f(x) = f(L_g[x]), \quad \text{for all } g \in G, x \in \mathcal{X}$$
 $K_g[f(x)] = f(L_g[x]), \quad \text{for all } g \in G, x \in \mathcal{X}$
 
 ### 代码
+
+对于等变网络的实现, 主要是实现其中的等变网络层, 其主要的实现在论文中的描述为:
+
+本文考虑在线性层的基础上进行改进，使其满足等变性。考虑一个线性层 $z' = \mathbf{W}z + \mathbf{b}$，
+其中 $\mathbf{W} \in \mathbb{R}^{D_{out} \times D_{in}}$ 表示权重矩阵，$\mathbf{b} \in \mathbb{R}^{D_{in}}$ 表示偏置向量。为了简化分析，将偏置
+融合进权重矩阵：$\mathbf{W} \mapsto [\mathbf{W}, \mathbf{b}]$，$z \mapsto [z, 1]^T$，将该增强版权重的空间记为 $\mathcal{W}_{total}$。对
+于矩阵形式的线性群变换操作，$(L_g, K_g)$，这里 $L_g$ 表示输入变换，$K_g$ 表示输出变换，我
+们需要解一下线性方程组：
+
+$$\mathbf{K}_g \mathbf{W}z = \mathbf{W}\mathbf{L}_g z, \quad \text{for all } g \in G, z \in \mathbb{R}^{D_{in} + 1}$$
+
+方程对所有 $z$ 成立，因此可以去掉 $z$。我们的目标是求解所有满足该方程的权重，将这些等
+变权重的空间记为 $\mathcal{W}$，$\mathcal{W}$ 实际上可以写为
+
+$$\mathcal{W} \triangleq \{\mathbf{W} \in \mathcal{W}_{total} | \mathbf{K}_g \mathbf{W} = \mathbf{W}\mathbf{L}_g, \text{for all } g \in G\}$$
+
+对于任意 $g \in G$，$\mathbf{K}_g \mathbf{W} = \mathbf{W}\mathbf{L}_g$ 对于 $\mathbf{W}$ 都是线性的。因此，为了找到 $\mathcal{W}$，需要求解一
+系列 $\mathbf{W}$ 的线性方程。
+
+为了求解该线性方程组，首先构造一个运算器 symmetrizer $S(\mathbf{W})$：
+
+$$S(\mathbf{W}) \triangleq \frac{1}{|G|} \sum_{g \in G} \mathbf{K}_g^{-1} \mathbf{W}\mathbf{L}_g$$
+
+最后的这个公式就是实现等变网络的核心部分。它通过对所有群元素的变换进行平均，来构造一个满足等变性的线性层。
+
+其核心实现为
+
+```python
+def symmetrize(W, group):
+    """
+    Create equivariant weight matrix
+    """
+    Wsym = 0
+    for parameter in group.parameters:
+        input_trans = group._input_transformation(W, parameter)
+        Wsym += group._output_transformation(input_trans, parameter)
+    return Wsym
+```
+
+group 就是下面的 `GroupRepresentations` 类, 其主要是一个 `list[torch.FloatTensor]` 的封装, 其中每个元素都是一个矩阵, 代表了一个变换操作
+> [!NOTE]
+> 说实话我没看懂这个变化为什么是这样写的, 不知道其中的两个变化代表什么, 矩阵学的太差了只能说, 不过这也有个挺好意思的点
+> 这里要求的 K 逆, 实际上和 K 是一样的, 少了一个求逆的运算
 
 ```python
 class GroupRepresentations:
@@ -260,6 +304,8 @@ class MatrixRepresentation(Group):
         return weights
 ```
 
+可以看到这里主要是实现一个矩阵的相乘, 不过这两个参数是什么呢? 我们要看看怎么 `BasisCartpoleNetwork` 中的 `BasisLinear` 的实现`
+
 ```python
 class BasisCartpoleNetwork(torch.nn.Module):
     """
@@ -273,6 +319,12 @@ class BasisCartpoleNetwork(torch.nn.Module):
 
         if isinstance(hidden_sizes, int):
             hidden_sizes = [hidden_sizes]
+
+        # 不要最后一个,不要第一个, 然后拼起来
+        # 举例这有什么用, hidden_sizes = [64, 32, 16]
+        # 这样 in_out_list = [(64, 32), (32, 16)]
+        # 这样就可以方便的构建 BasisLinear 的输入输出层(感觉没什么用)
+
 
         in_out_list = zip(hidden_sizes[:-1], hidden_sizes[1:])
         input_layer = BasisLinear(input_size, hidden_sizes[0], group=repr_in,
@@ -301,16 +353,19 @@ class BasisCartpoleNetwork(torch.nn.Module):
 
 Basis Linear通常指的是线性基函数或基线性变换,
 
+$L_g$ 和 $K_g$ 分别表示输入和输出的变换操作。
+路径1：先变换输入 (L_g)，再通过网络 (W)
+路径2：先通过网络 (W)，再变换输出 (K_g)
+n_samples 是样本数, 这里是4096 多取点是为了更好地捕捉群对称性。
+
 ```python
 class BasisLinear(BasisLayer):
     """
     Group-equivariant linear layer
     """
-    def __init__(self, channels_in, channels_out, group, bias=True,
-                 n_samples=4096, basis="equivariant", gain_type="xavier",
-                 bias_init=False):
-        """
-        """
+    def __init__(self, channels_in:int, channels_out:int, group:GroupRepresentation,
+                 bias:bool=True, n_samples:int=4096, basis:str="equivariant",
+                 gain_type:str="xavier", bias_init:bool=False):
         super().__init__()
 
         self.group = group
