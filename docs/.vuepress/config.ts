@@ -101,6 +101,7 @@ export default defineUserConfig({
       //   indexName: '',
       // },
 
+
       /* 文章字数统计、阅读时间，设置为 false 则禁用 */
       // readingTime: true,
 
@@ -167,6 +168,9 @@ export default defineUserConfig({
         inputPosition: 'top',
       },
     },
+    markdown: {
+      mermaid: true, // 启用 mermaid
+    }
 
     /**
      * 加密功能
