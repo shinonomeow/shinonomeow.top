@@ -5,7 +5,7 @@ config:
   -
     type: banner
     full: true
-    banner: /images/koro_full.png
+    banner: /images/kuro_full.png
     bannerMask:
       dark: 0.3
     hero:
