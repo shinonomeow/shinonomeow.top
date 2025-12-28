@@ -56,7 +56,6 @@ export default defineThemeConfig({
     // location: '',
     // organization: '',
   },
-
   navbar,
   collections,
 
