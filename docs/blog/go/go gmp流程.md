@@ -1,6 +1,8 @@
 ---
 title: go gmp流程
 createTime: 2026/01/23 10:40:06
+tags:
+  - go
 permalink: /blog/7ptt2dys/
 ---
 本文是对 小徐先生 的 gmp 原理解析的一些阅读笔记
